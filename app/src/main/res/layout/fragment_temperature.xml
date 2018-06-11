@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textViewTemp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/sub_title_margin"
+            android:text="Temperatura:"
+            android:textColor="@color/subtitle"
+            android:textSize="@dimen/sub_title_size" />
+
+        <TextView
+            android:id="@+id/textViewInfoTemp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/info_margin"
+            android:textColor="@color/textInfo"
+            android:textSize="@dimen/info_size" />
+</LinearLayout>

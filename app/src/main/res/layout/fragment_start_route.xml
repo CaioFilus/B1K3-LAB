@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtViewDis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/sub_title_margin"
+                android:text="Distância:"
+                android:textColor="@color/subtitle"
+                android:textSize="@dimen/sub_title_size"
+                android:typeface="normal" />
+
+            <TextView
+                android:id="@+id/textInfoDis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/info_margin"
+                android:background="@drawable/info_card"
+                android:textColor="@color/textInfo"
+                android:textSize="@dimen/info_size" />
+
+            <TextView
+                android:id="@+id/txtViewGPS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/sub_title_margin"
+                android:text="Longitude e Latitude:"
+                android:textColor="@color/subtitle"
+                android:textSize="@dimen/sub_title_size" />
+
+            <TextView
+                android:id="@+id/txtViewInfoGPS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/info_margin"
+                android:background="@drawable/info_card"
+                android:textColor="@color/textInfo"
+                android:textSize="@dimen/info_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewMic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/sub_title_margin"
+                        android:text="Microfone:"
+                        android:textColor="@color/subtitle"
+                        android:textSize="@dimen/sub_title_size" />
+
+                    <TextView
+                        android:id="@+id/textViewInfoMic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/info_margin"
+                        android:background="@drawable/info_card"
+                        android:textColor="@color/textInfo"
+                        android:textSize="@dimen/info_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewVelo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/sub_title_margin"
+                        android:text="Velocidade:"
+                        android:textColor="@color/subtitle"
+                        android:textSize="@dimen/sub_title_size" />
+
+                    <TextView
+                        android:id="@+id/textViewInfoVelo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="@dimen/info_margin"
+                        android:background="@drawable/info_card"
+                        android:textColor="@color/textInfo"
+                        android:textSize="@dimen/info_size" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <FrameLayout
+                android:id="@+id/fragmentTemp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

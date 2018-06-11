@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/routes"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="Lista de Rotas"/>
+    <item
+        android:id="@+id/bluetooth"
+        android:icon="@android:drawable/stat_sys_data_bluetooth"
+        android:title="Bluetooth"/>
+
+    <item
+        android:id="@+id/about"
+        android:icon="@android:drawable/stat_notify_chat"
+        android:title="Sobre"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/exit"
+        android:icon="@android:drawable/ic_lock_power_off"
+        android:title="Sair"/>
+
+</menu>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/imgViewUfpr"
+        android:layout_width="match_parent"
+        android:layout_height="211dp"
+        android:contentDescription="@string/app_name"
+        android:visibility="invisible"
+        app:srcCompat="@mipmap/ufpr_logo" />
+
+    <ImageView
+        android:id="@+id/imgViewNpdeas"
+        android:layout_width="match_parent"
+        android:layout_height="207dp"
+        android:contentDescription="@string/app_name"
+        android:visibility="invisible"
+        app:srcCompat="@mipmap/npdeas_logo" />
+
+    <TextView
+        android:id="@+id/textViewPresent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Apresentam:"
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="24sp"
+        android:visibility="invisible" />
+</LinearLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="sub_title_margin">5dp</dimen>
+    <dimen name="info_margin">10dp</dimen>
+    <dimen name="sub_title_size">12sp</dimen>
+    <dimen name="info_size">20sp</dimen>
+    <dimen name="title_size">25sp</dimen>
+    <dimen name="title_margin">20sp</dimen>
+
+    <dimen name="fab_margin">120dp</dimen>
+
+    <dimen name="fab_modal_margin">20dp</dimen>
+
+    <dimen name="position_fab1">240dp</dimen>
+    <dimen name="position_fab2">180dp</dimen>
+    <dimen name="position_fab3">120dp</dimen>
+    <dimen name="position_fab4">60dp</dimen>
+
+
+    <dimen name="standard_105">40dp</dimen>
+    <dimen name="standard_155">40dp</dimen>
+
+
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="blueNpDeas">#18385f</color>
+    <color name="redNpDeas">#A74136</color>
+    <color name="yellowNpDeas">#626C26</color>
+    <color name="greenNpDeas">#30764F</color>
+
+    <color name="subtitle">@android:color/darker_gray</color>
+    <color name="textInfo">@android:color/black</color>
+    <color name="title">@android:color/black</color>
+
+    <color name="fabColor">@color/greenNpDeas</color>
+
+    <color name="blueNpDeasTran">#7718385f</color>
+
+    <color name="blackTransparent">#88000000</color>
+</resources>

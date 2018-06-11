@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Smart Mobility</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+
+    //IDs de serialização
+    <string name="file_route">fileRoute</string>
+    <string name="file_image">fileImage</string>
+    <string name="temp_sensor_exists">TempSensorExists</string>
+
+    //Nome de das rotas
+    <string name="morning_pedal">Pedalada Matutina</string>
+    <string name="afternoon_pedal">Pedalada Vespertina</string>
+    <string name="evening_pedal">Pedalada Noturna</string>
+
+    //Ids das transisções
+    <string name="transition_route">imgRoute</string>
+    <string name="transition_date">textViewDate</string>
+
+    <string name="bike">Imagem da bike</string>
+    <string name="foot">Imagem à pé</string>
+    <string name="bus">Imagem do onibus</string>
+    <string name="car">Imagem do carro</string>
+
+
+    <string name="about">O Projeto de Extensão Ciência para Todos pretende coletar informações
+        relativas ao: (A) meio ambiental, (B) comportamento de bicicletas no trânsito e (C) saúde
+        do ciclista. Para isso o projeto está desenvolvendo um equipamento portátil chamado
+        de B1K3 LAB, o laboratório móvel sobre rodas da UFPR.</string>
+
+
+</resources>

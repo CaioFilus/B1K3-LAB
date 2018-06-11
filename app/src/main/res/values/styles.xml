@@ -1,0 +1,16 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/blueNpDeas</item>
+        <item name="colorPrimaryDark">@color/greenNpDeas</item>
+        <item name="colorAccent">@color/redNpDeas</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowSharedElementsUseOverlay">false</item>
+
+
+
+    </style>
+
+</resources>

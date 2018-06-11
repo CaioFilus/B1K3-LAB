@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/footModal"
+        android:icon="@mipmap/icon_walk"
+        android:title="" />
+    <item
+        android:id="@+id/bikeModal"
+        android:icon="@mipmap/icon_bike"
+        android:title="" />
+    <item
+        android:id="@+id/carModal"
+        android:icon="@mipmap/icon_car"
+        android:title=""
+        android:gravity = "center_horizontal"
+        android:visible="true" />
+    <item
+        android:id="@+id/busModal"
+        android:title=""
+        android:icon="@mipmap/icon_bus"/>
+</menu>
