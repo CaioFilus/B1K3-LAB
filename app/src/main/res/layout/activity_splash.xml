@@ -19,7 +19,7 @@
         android:layout_height="207dp"
         android:contentDescription="@string/app_name"
         android:visibility="invisible"
-        app:srcCompat="@mipmap/npdeas_logo" />
+        app:srcCompat="@mipmap/ciencia_para_todos" />
 
     <TextView
         android:id="@+id/textViewPresent"

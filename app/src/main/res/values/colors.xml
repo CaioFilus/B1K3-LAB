@@ -7,7 +7,10 @@
     <color name="blueNpDeas">#18385f</color>
     <color name="redNpDeas">#A74136</color>
     <color name="yellowNpDeas">#626C26</color>
-    <color name="greenNpDeas">#30764F</color>
+    <color name="greenNpDeas">#5E9675</color>
+
+    <color name="blueLightNpDeas">#298587</color>
+    <color name="greenLightNpDeas">#659695</color>
 
     <color name="subtitle">@android:color/darker_gray</color>
     <color name="textInfo">@android:color/black</color>

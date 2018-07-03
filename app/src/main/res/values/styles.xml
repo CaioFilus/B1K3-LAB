@@ -7,10 +7,8 @@
         <item name="colorPrimaryDark">@color/greenNpDeas</item>
         <item name="colorAccent">@color/redNpDeas</item>
         <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowSharedElementsUseOverlay">false</item>
 
-
-
     </style>
-
 </resources>

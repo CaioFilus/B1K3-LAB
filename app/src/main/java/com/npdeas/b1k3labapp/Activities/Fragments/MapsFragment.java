@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 
 import com.npdeas.b1k3labapp.Maps.Maps;
-import com.npdeas.b1k3labapp.Npdeas.FileStruct;
+import com.npdeas.b1k3labapp.Route.Npdeas.FileStruct;
 import com.npdeas.b1k3labapp.R;
 import com.google.android.gms.maps.MapView;
 
@@ -47,10 +47,10 @@ public class MapsFragment extends Fragment implements Maps.OnLocationChanged {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            fragmentsCommunication = (GpsFragmentEvent) context;
-
+            fragmentsCommunication = (GpsFragmentEvent) getActivity();
+            fragmentsCommunication.onFragmentCreate();
         } catch (Exception e) {
-            Log.i("MapsFragment", e.getMessage());
+            Log.e("MapsFragment", e.getMessage());
         }
     }
 

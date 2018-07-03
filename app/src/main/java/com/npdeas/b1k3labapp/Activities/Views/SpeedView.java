@@ -32,17 +32,12 @@ public class SpeedView extends AppCompatImageView{
             this.setImageResource(R.drawable.ic_acelerometro);
             drawable = res.getDrawable(R.drawable.ic_flecha);
 
-            bitmap = BitmapFactory.decodeResource(res, R.drawable.ic_flecha);
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            bitmap = bitmapDrawable.getBitmap();
-
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-
-        canvas.setBitmap(bitmap);
+        drawable.draw(canvas);
     }
 }

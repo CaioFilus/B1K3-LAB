@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -107,13 +109,86 @@
 
             </LinearLayout>
 
-
-            <FrameLayout
-                android:id="@+id/fragmentTemp"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewMaxVelo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/sub_title_margin"
+                        android:text="Velocidade Máxima:"
+                        android:textColor="@color/subtitle"
+                        android:textSize="@dimen/sub_title_size" />
+
+                    <TextView
+                        android:id="@+id/textViewInfoMaxVelo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="@dimen/info_margin"
+                        android:background="@drawable/info_card"
+                        android:textColor="@color/textInfo"
+                        android:textSize="@dimen/info_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewAvarageVelo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/sub_title_margin"
+                        android:text="Velocidade Média:"
+                        android:textColor="@color/subtitle"
+                        android:textSize="@dimen/sub_title_size" />
+
+                    <TextView
+                        android:id="@+id/textViewInfoAvarageVelo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="@dimen/info_margin"
+                        android:background="@drawable/info_card"
+                        android:textColor="@color/textInfo"
+                        android:textSize="@dimen/info_size" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
         </LinearLayout>
     </android.support.v7.widget.CardView>
+
+    <com.github.anastr.speedviewlib.PointerSpeedometer
+        android:id="@+id/velocimeter"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        app:sv_backgroundCircleColor="@color/fui_transparent"
+        app:sv_centerCircleColor="@color/blueNpDeas"
+        app:sv_indicatorColor="@color/greenLightNpDeas"
+        app:sv_indicatorLightColor="@color/greenNpDeas"
+        app:sv_maxSpeed="90"
+        app:sv_minSpeed="0"
+        app:sv_pointerColor="@color/blueLightNpDeas"
+        app:sv_speedTextColor="@color/greenNpDeas"
+        app:sv_speedometerColor="@color/blueNpDeas"
+        app:sv_textColor="@color/greenNpDeas"
+        app:sv_unitTextColor="@color/greenLightNpDeas"
+        app:sv_textSize="10dp"
+        app:sv_unitTextSize="6dp"/>
 
 
 </LinearLayout>

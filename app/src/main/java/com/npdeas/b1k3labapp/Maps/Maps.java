@@ -2,6 +2,7 @@ package com.npdeas.b1k3labapp.Maps;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -35,7 +36,7 @@ public class Maps implements OnMapReadyCallback, GoogleApiClient.ConnectionCallb
         .OnConnectionFailedListener, GoogleMap.OnCameraMoveCanceledListener,GoogleMap.SnapshotReadyCallback,LocationListener{
 
     private Bundle bundle;
-    private Activity activity;
+    private Context context;
     private GoogleMap map;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -60,8 +61,8 @@ public class Maps implements OnMapReadyCallback, GoogleApiClient.ConnectionCallb
 
     private final static float MIN_ACCURACY = 20;// 20 metros
 
-    public Maps(Activity activity, Bundle bundle, MapView mapFragment) {
-        this.activity = activity;
+    public Maps(Context context, Bundle bundle, MapView mapFragment) {
+        this.context = context;
         this.bundle = bundle;
         mLastLocation = null;
         circles = new ArrayList<>();
@@ -83,12 +84,14 @@ public class Maps implements OnMapReadyCallback, GoogleApiClient.ConnectionCallb
         isStartRoute = false;
         removeLines();
         removeCircles();
+        map.clear();
     }
     public void setMyLocation(boolean location){
         myLocalization = location;
     }
     public void removeCircles(){
         for(int i = 0;i < circles.size();i++){
+
             circles.get(i).remove();
             circles.remove(i);
         }
@@ -99,6 +102,7 @@ public class Maps implements OnMapReadyCallback, GoogleApiClient.ConnectionCallb
             lines.get(i).remove();
             lines.remove(i);
         }
+
         lines.clear();
     }
     public void addCircle(double latitude,double longitude){
@@ -139,7 +143,6 @@ public class Maps implements OnMapReadyCallback, GoogleApiClient.ConnectionCallb
 
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-
             //move map camera
             map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             map.animateCamera(CameraUpdateFactory.zoomTo(zoom));
@@ -176,10 +179,10 @@ public class Maps implements OnMapReadyCallback, GoogleApiClient.ConnectionCallb
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         //Initialize Google Play Services
-        if (ContextCompat.checkSelfPermission(activity,
+        if (ContextCompat.checkSelfPermission(context,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            mGoogleApiClient = new GoogleApiClient.Builder(activity)
+            mGoogleApiClient = new GoogleApiClient.Builder(context)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
@@ -196,18 +199,19 @@ public class Maps implements OnMapReadyCallback, GoogleApiClient.ConnectionCallb
         mLocationRequest.setFastestInterval(FATEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
-        if (ContextCompat.checkSelfPermission(activity,
+        if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
 
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                     mLocationRequest, this);
-
+            map.snapshot(this,snapshoot);
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if(mLastLocation != null){
                 map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(mLastLocation.getLatitude(),
                         mLastLocation.getLongitude())));
                 map.animateCamera(CameraUpdateFactory.zoomTo(zoom));
+
                 longitude = mLastLocation.getLongitude();
                 latitude = mLastLocation.getLatitude();
             }

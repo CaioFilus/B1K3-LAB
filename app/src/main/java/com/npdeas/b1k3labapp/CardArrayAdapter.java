@@ -13,11 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.npdeas.b1k3labapp.Route.Route;
+
 import java.io.File;
 import java.util.ArrayList;
 
 public class CardArrayAdapter extends RecyclerView.Adapter<CardArrayAdapter.ViewHolder> {
-    private ArrayList<CardMap> mDataset;
+
+    static private CardArrayAdapter thisObject = null;
+
+    private ArrayList<Route> mDataset;
     private static ItemClickListener itemClickListener;
     private ViewHolder holder;
     private int position;
@@ -30,8 +35,7 @@ public class CardArrayAdapter extends RecyclerView.Adapter<CardArrayAdapter.View
         public TextView textViewTime;
         public TextView textViewDate;
         public TextView textViewTitle;
-        public File imgFile;
-        public File routeFile;
+        public int position;
 
 
         public ViewHolder(View itemView) {
@@ -47,17 +51,29 @@ public class CardArrayAdapter extends RecyclerView.Adapter<CardArrayAdapter.View
         @Override
         public void onClick(View view) {
             if (itemClickListener != null) {
-                itemClickListener.onItemClick(routeFile,imgFile, imgViewMap);
+                itemClickListener.onItemClick(position, imgViewMap);
             }
         }
 
 
     }
 
-    public CardArrayAdapter(ArrayList<CardMap> myDataset) {
+    private CardArrayAdapter(ArrayList<Route> myDataset) {
         mDataset = myDataset;
     }
-
+    public static CardArrayAdapter getInstance(ArrayList<Route> myDataset){
+        if(thisObject == null){
+            thisObject = new CardArrayAdapter(myDataset);
+            return thisObject;
+        }
+        return thisObject;
+    }
+    public static CardArrayAdapter getInstance(){
+        return thisObject;
+    }
+    public Route getRoute(int index){
+        return mDataset.get(index);
+    }
 
     public void setOnItemClickListener(ItemClickListener itemClickListener) {
         CardArrayAdapter.itemClickListener = itemClickListener;
@@ -75,12 +91,14 @@ public class CardArrayAdapter extends RecyclerView.Adapter<CardArrayAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         this.holder = holder;
-        holder.textViewTitle.setText(mDataset.get(position).getRouteTitle());
-        holder.imgViewMap.setImageBitmap(mDataset.get(position).getImgMap());
-        holder.textViewTime.setText(mDataset.get(position).getTimeMap());
-        holder.textViewDate.setText(mDataset.get(position).getDateMap());
-        holder.imgFile = mDataset.get(position).getImgFile();
-        holder.routeFile = mDataset.get(position).getRouteFile();
+        String[] dataTime = mDataset.get(position).getDataTime().split(" ");
+        holder.textViewTitle.setText(mDataset.get(position).getRouteName());
+        holder.imgViewMap.setImageBitmap(mDataset.get(position).getImg());
+        holder.textViewTime.setText(dataTime[0]);
+        holder.textViewDate.setText(dataTime[1]);
+        holder.position = position;
+        /*holder.imgFile = mDataset.get(position).getImgFile();
+        holder.routeFile = mDataset.get(position).getRouteFile();*/
 
     }
 
@@ -92,7 +110,7 @@ public class CardArrayAdapter extends RecyclerView.Adapter<CardArrayAdapter.View
 
 
     public interface ItemClickListener {
-        void onItemClick(File routeFile, File imgFile, ImageView image);
+        void onItemClick(int routeIndex, ImageView image);
     }
 
 }

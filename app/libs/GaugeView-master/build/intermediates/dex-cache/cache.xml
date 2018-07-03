@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/sulejman/AndroidStudioProjects/GaugeView/app/build/intermediates/exploded-aar/GaugeView/gaugelibrary/unspecified/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="ff099601113a7b78688ae8850122bc7280e9dffd">
+        <dex dex="/Users/sulejman/AndroidStudioProjects/GaugeView/app/build/intermediates/pre-dexed/debug/classes-457a7a33d7849090296280c98be1d30bd882f05d.jar" />
+    </item>
+
+</items>

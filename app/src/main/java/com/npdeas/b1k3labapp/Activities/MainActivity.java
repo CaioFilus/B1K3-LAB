@@ -1,6 +1,9 @@
 package com.npdeas.b1k3labapp.Activities;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -11,6 +14,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,16 +28,22 @@ import android.widget.Button;
 
 import com.npdeas.b1k3labapp.Activities.Fragments.MapsFragment;
 import com.npdeas.b1k3labapp.Activities.Fragments.StartRouteFragment;
+import com.npdeas.b1k3labapp.Activities.Fragments.TesteFragment;
 import com.npdeas.b1k3labapp.Bluetooth.Bluetooth;
 import com.npdeas.b1k3labapp.Constants;
-import com.npdeas.b1k3labapp.Npdeas.FileNames;
-import com.npdeas.b1k3labapp.Npdeas.FileStruct;
-import com.npdeas.b1k3labapp.Npdeas.ModalType;
-import com.npdeas.b1k3labapp.Npdeas.NpDeasWriter;
+import com.npdeas.b1k3labapp.Route.Npdeas.FileNames;
+import com.npdeas.b1k3labapp.Route.Npdeas.FileStruct;
+import com.npdeas.b1k3labapp.Route.Npdeas.ModalType;
+import com.npdeas.b1k3labapp.Route.Npdeas.NpDeasWriter;
 import com.npdeas.b1k3labapp.R;
 import com.npdeas.b1k3labapp.Sensors.Microphone;
 import com.npdeas.b1k3labapp.Sensors.NpdeasSensorManager;
 import com.npdeas.b1k3labapp.WebDb;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.long1.spacetablayout.SpaceTabLayout;
 
 /**
  * Created by NPDEAS on 5/24/2018.
@@ -66,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView
     private FloatingActionButton fab2;
     private FloatingActionButton fab3;
     private FloatingActionButton fab4;
+    private SpaceTabLayout tabLayout;
 
 
     @Override
@@ -77,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         viewPager = findViewById(R.id.viewPager);
         drawerLayout = findViewById(R.id.drawer);
         navigationView = findViewById(R.id.navigationView);
-        fabStartRoute = findViewById(R.id.fab);
+        fabStartRoute = findViewById(R.id.fabStartRoute);
+        tabLayout = findViewById(R.id.spaceTabLayout);
         //orientação da tela
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //sincronizando o SlindingMenu e adicionando o listener dele
@@ -86,12 +99,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navigationView.setNavigationItemSelectedListener(this);
+
+        List<Fragment> fragmentList = new ArrayList<>();
+        mapsFragment = new MapsFragment();
+        routeFragment = new StartRouteFragment();
+        TesteFragment testeFragment = new TesteFragment();
+
+        fragmentList.add(mapsFragment);
+        fragmentList.add(routeFragment);
+        fragmentList.add(testeFragment);
+
+        tabLayout.initialize(viewPager, getSupportFragmentManager(),
+                fragmentList, savedInstanceState);
+
+        /*TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+
+        stackBuilder.addParentStack(this);
+        new Intent("start_route");
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification notification = new Notification.Builder(this)
+                // Show controls on lock screen even when user hides sensitive content.
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setSmallIcon(android.R.drawable.ic_dialog_map)
+                // Add media control buttons that invoke intents in your media service
+                .addAction(android.R.drawable.ic_media_play, "Iniciar", resultPendingIntent) // #0
+                .addAction(android.R.drawable.ic_media_pause, "Parar", resultPendingIntent)
+                .setContentTitle("Wonderful music")
+                .setContentText("My Awesome Band")
+                .build();// #1*/
+                // Apply the media style template
+
         //Colocando o SlidingView(aquele movimentinho de ir pro lado na tela)
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        /*PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         //pegando o objeto de cada Fragment
         mapsFragment = (MapsFragment) pagerAdapter.getItem(0);
-        routeFragment = (StartRouteFragment) pagerAdapter.getItem(1);
+        routeFragment = (StartRouteFragment) pagerAdapter.getItem(1);*/
         //splashScreen
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -262,6 +308,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         //mapFragment.onDestroy();
     }
 
+    //we need the outState to save the position
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        tabLayout.saveState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -321,9 +374,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView
     public void onGetGpsLocation(FileStruct fileStruct) {
         fileStruct.setDb((byte) mic.getDbMobilAvarage());
         if (bluetooth.isConnected()) {
-            fileStruct.setDistance((short) bluetooth.getDistance());
+            fileStruct.setOvertaking((short) bluetooth.getDistance());
         } else {
-            fileStruct.setDistance((short) 0);
+            fileStruct.setOvertaking((short) 0);
         }
         this.fileStruct = fileStruct;
         if (fabFlag) {
@@ -340,12 +393,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView
                     try {
                         Thread.sleep(200);
                     } catch (Exception e) {
-                        Log.i("MainActivity ", e.getMessage());
+                        Log.e("MainActivity ", e.getMessage());
                     }
                     db = (byte) mic.getDbMobilAvarage();
                     dis = bluetooth.getDistance();
                     fileStruct.setDb(db);
-                    fileStruct.setDistance(dis);
+                    fileStruct.setOvertaking(dis);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

@@ -9,10 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.npdeas.b1k3labapp.Npdeas.FileStruct;
+import com.github.anastr.speedviewlib.PointerSpeedometer;
+import com.npdeas.b1k3labapp.Route.Npdeas.FileStruct;
 import com.npdeas.b1k3labapp.R;
-
-import java.sql.Struct;
 
 /**
  * Created by NPDEAS on 5/17/2018.
@@ -21,12 +20,13 @@ import java.sql.Struct;
 public class StartRouteFragment extends Fragment{
 
     private View v;
-    private FileStruct struct;
+
     private TextView txtViewInfoDis;
     private TextView txtViewInfoGps;
     private TextView txtViewInfoMic;
     private TextView txtViewInfoVelo;
     private TextView txtViewInfoTemp;
+    private PointerSpeedometer velocimeter;
 
     @Nullable
     @Override
@@ -37,17 +37,19 @@ public class StartRouteFragment extends Fragment{
         txtViewInfoMic = v.findViewById(R.id.textViewInfoMic);
         txtViewInfoVelo = v.findViewById(R.id.textViewInfoVelo);
         txtViewInfoTemp = v.findViewById(R.id.textViewInfoTemp);
+        velocimeter = v.findViewById(R.id.velocimeter);
          return v;
     }
     public void setRoutePartion(FileStruct struct){
          txtViewInfoGps.setText(struct.getLongetude() + ", " + struct.getLongetude());
          txtViewInfoVelo.setText(struct.getSpeed() + "m/s");
          txtViewInfoMic.setText(struct.getDb() + "db");
+         velocimeter.speedTo((float) (struct.getDb()),500);
          try {
-             if (struct.getDistance() == 0) {
+             if (struct.getOvertaking() == 0) {
                  txtViewInfoDis.setText("B1K3 Lab não conectado");
              } else {
-                 txtViewInfoDis.setText(struct.getDistance() + "m");
+                 txtViewInfoDis.setText(struct.getOvertaking() + "m");
              }
          }catch (Exception e){
              Log.i("aqui", "deu errro aqui rapaz");
