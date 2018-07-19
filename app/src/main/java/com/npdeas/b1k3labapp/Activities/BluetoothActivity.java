@@ -48,7 +48,7 @@ public class BluetoothActivity extends AppCompatActivity {
         progressBar.setVisibility(View.INVISIBLE);
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1);
         listView.setAdapter(adapter);
-        bluetooth = new Bluetooth(this);
+        bluetooth = new Bluetooth();
 
         //verifica se há algum  dispositivo pareado
         final Set<BluetoothDevice> pairedDevices = bluetooth.getPairedDevices();

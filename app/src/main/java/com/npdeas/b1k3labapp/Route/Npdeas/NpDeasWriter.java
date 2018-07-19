@@ -55,7 +55,7 @@ public class NpDeasWriter {
 
     }
 
-    public synchronized void  addNewLine(FileStruct struct){
+    public synchronized void  addNewLine(RouteNode struct){
         try {
             int i = 0;
             int j;
@@ -99,7 +99,7 @@ public class NpDeasWriter {
                         + File.separator + fileName + ".png");
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, imgOutput);
             } catch (Exception e) {
-
+                Log.i("Writer",e.getMessage());
             }
         }else{
             file.delete();

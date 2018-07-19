@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.npdeas.b1k3labapp">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -22,8 +23,9 @@
 
     <permission
         android:name="com.pkg.map.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature"></permission>
+        android:protectionLevel="signature" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -34,8 +36,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-
         tools:ignore="HardcodedDebugMode">
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -45,54 +47,55 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
         -->
         <uses-library android:name="com.google.android.maps" />
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <!--Serviços do App-->
+
+        <!-- Broadcast do App -->
+        <receiver android:name=".Broadcast.ActivityRouteReceiver" />
+        <!-- Serviços do App -->
         <service
             android:name=".Services.RouteService"
-            android:exported="false" />
+            android:exported="false"
+            />
 
-        <activity android:name="com.npdeas.b1k3labapp.Activities.MainActivity"
+        <activity
+            android:name=".Activities.MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.npdeas.b1k3labapp.Activities.RoutesActivity">
+        <activity android:name=".Activities.RoutesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.npdeas.b1k3labapp.Activities.RoutesActivity" />
         </activity>
-        <activity android:name="com.npdeas.b1k3labapp.Activities.RouteInfoActivity">
+        <activity android:name=".Activities.RouteInfoActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.npdeas.b1k3labapp.Activities.RouteInfoActivity" />
         </activity>
-
-        <activity android:name="com.npdeas.b1k3labapp.Activities.BluetoothActivity">
+        <activity android:name=".Activities.BluetoothActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.npdeas.b1k3labapp.Activities.MainActivity" />
         </activity>
-
-        <activity android:name="com.npdeas.b1k3labapp.Activities.AboutActivity" />
-
-
-        <activity android:name="com.npdeas.b1k3labapp.Activities.SplashActivity">
+        <activity android:name=".Activities.AboutActivity" />
+        <activity android:name=".Activities.SplashActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.npdeas.b1k3labapp.Activities.MainActivity" />
         </activity>
-
-
-
+        <activity
+            android:name=".Activities.Popup_Activityes.EasterEggPopup"
+            android:theme="@style/PopupTheme" />
     </application>
 
 </manifest>

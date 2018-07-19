@@ -10,6 +10,8 @@
     <string name="file_image">fileImage</string>
     <string name="temp_sensor_exists">TempSensorExists</string>
     <string name="route_nr">routeNr</string>
+    <string name="start_route">startRoute</string>
+    <string name="stop_route">stopRoute</string>
 
     //Nome de das rotas
     <string name="morning_pedal">Pedalada Matutina</string>
@@ -37,6 +39,11 @@
         relativas ao: (A) meio ambiental, (B) comportamento de bicicletas no trânsito e (C) saúde
         do ciclista. Para isso o projeto está desenvolvendo um equipamento portátil chamado
         de B1K3 LAB, o laboratório móvel sobre rodas da UFPR.</string>
+
+    <string name="new_message_notification_title_template">Controlador SmartMobility</string>
+
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
 
 
 </resources>

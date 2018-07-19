@@ -3,7 +3,7 @@ package com.npdeas.b1k3labapp.Activities;
 import android.Manifest;
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -15,7 +15,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,15 +29,12 @@ import android.widget.Button;
 import com.npdeas.b1k3labapp.Activities.Fragments.MapsFragment;
 import com.npdeas.b1k3labapp.Activities.Fragments.StartRouteFragment;
 import com.npdeas.b1k3labapp.Activities.Fragments.TesteFragment;
-import com.npdeas.b1k3labapp.Bluetooth.Bluetooth;
+import com.npdeas.b1k3labapp.Broadcast.RouteBroadcastReciver;
 import com.npdeas.b1k3labapp.Constants;
-import com.npdeas.b1k3labapp.Route.Npdeas.FileNames;
-import com.npdeas.b1k3labapp.Route.Npdeas.FileStruct;
 import com.npdeas.b1k3labapp.Route.Npdeas.ModalType;
-import com.npdeas.b1k3labapp.Route.Npdeas.NpDeasWriter;
 import com.npdeas.b1k3labapp.R;
 import com.npdeas.b1k3labapp.Sensors.Microphone;
-import com.npdeas.b1k3labapp.Sensors.NpdeasSensorManager;
+import com.npdeas.b1k3labapp.Services.RouteService;
 import com.npdeas.b1k3labapp.WebDb;
 
 import java.util.ArrayList;
@@ -50,16 +47,13 @@ import eu.long1.spacetablayout.SpaceTabLayout;
  */
 
 public class MainActivity extends AppCompatActivity implements NavigationView
-        .OnNavigationItemSelectedListener, MapsFragment.GpsFragmentEvent {
+        .OnNavigationItemSelectedListener, MapsFragment.GpsFragmentEvent,
+        RouteService.ServiceListener {
 
+    private static MainActivity thisObject;
 
-    private Bluetooth bluetooth;
-    private Microphone mic;
-    private NpdeasSensorManager sensors = null;
-    private NpDeasWriter manager;
-    private FileStruct fileStruct;
-    private byte db;
-    private int dis;
+    private Intent routeIntent;
+    private RouteService routeService;
     private boolean fabFlag = false;
     private boolean isFABOpen = false;
     private ModalType modalType;
@@ -84,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        thisObject = this;
 
         //iniciando os componentes de tela
         viewPager = findViewById(R.id.viewPager);
@@ -112,32 +107,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         tabLayout.initialize(viewPager, getSupportFragmentManager(),
                 fragmentList, savedInstanceState);
 
-        /*TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-
-        stackBuilder.addParentStack(this);
-        new Intent("start_route");
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new Notification.Builder(this)
-                // Show controls on lock screen even when user hides sensitive content.
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
-                .setSmallIcon(android.R.drawable.ic_dialog_map)
-                // Add media control buttons that invoke intents in your media service
-                .addAction(android.R.drawable.ic_media_play, "Iniciar", resultPendingIntent) // #0
-                .addAction(android.R.drawable.ic_media_pause, "Parar", resultPendingIntent)
-                .setContentTitle("Wonderful music")
-                .setContentText("My Awesome Band")
-                .build();// #1*/
-                // Apply the media style template
-
-        //Colocando o SlidingView(aquele movimentinho de ir pro lado na tela)
-        /*PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        //pegando o objeto de cada Fragment
-        mapsFragment = (MapsFragment) pagerAdapter.getItem(0);
-        routeFragment = (StartRouteFragment) pagerAdapter.getItem(1);*/
         //splashScreen
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -168,11 +137,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView
 
     public void inicialize() {
 
-        mic = new Microphone();
-        mic.startRecord();
-        bluetooth = new Bluetooth(this);
         new WebDb(this);
-        fileStruct = new FileStruct();
+        routeIntent = new Intent(MainActivity.this, RouteService.class);
+        RouteService.addServiceListener(new RouteService.ServiceListener() {
+            @Override
+            public void onCreateService(RouteService service) {
+                routeService = service;
+            }
+        });
+        startService(routeIntent);
+
         fabModal = findViewById(R.id.fabModal);
         fab1 = findViewById(R.id.fab1);
         fab2 = findViewById(R.id.fab2);
@@ -180,14 +154,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         fab4 = findViewById(R.id.fab4);
         modalType = ModalType.BIKE;
         lastImgResource = fabModal.getDrawable();
-                View.OnClickListener fabListener = new View.OnClickListener() {
+        View.OnClickListener fabListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FloatingActionButton aux = (FloatingActionButton) view;
                 fabModal.setImageDrawable(aux.getDrawable());
                 lastImgResource = aux.getDrawable();
-                for(int i = 0; i < 4; i++){
-                    if(ModalType.values()[i].valor == aux.getId()){
+                for (int i = 0; i < 4; i++) {
+                    if (ModalType.values()[i].valor == aux.getId()) {
                         modalType = ModalType.values()[i];
                         break;
                     }
@@ -224,48 +198,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView
                 }
             }
         });
-
-
-        //adiciona a barra de temperatura
-        /*if (sensors.isSensorWork(SensorType.TEMPERATURE)) {
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.fragmentTemp, new TemperatureFragment());
-            ft.commit();
-        }*/
-
         //seta o evento do botão
         fabStartRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!fabFlag) {
-                    mapsFragment.startRoute();
-                    manager = new NpDeasWriter(FileNames.fileName(MainActivity.this));
-                    //fabText.setText("Parar");
-                    viewPager.setCurrentItem(1);
-                    fabStartRoute.setText("Parar");
-                    fabFlag = true;
+                    if (routeService != null) {
+                        Intent startIntent = new Intent(MainActivity.this,
+                                RouteBroadcastReciver.class);
+                        startIntent.setAction(RouteBroadcastReciver.START_ROUTE_ACTION);
+                        sendBroadcast(startIntent);
+                        updateButton(RouteBroadcastReciver.START_ROUTE_ACTION);
+                    } else {
+                        Log.i("Main Activityy", "Serviço não criado");
+                    }
+
                 } else {
-                    fabFlag = false;
-                    //fabText.setText("Iniciar");
-                    fabStartRoute.setText("Iniciar");
-                    viewPager.setCurrentItem(0);
-                    manager.close(mapsFragment.finishRoute());
+                    Intent stopIntent = new Intent(MainActivity.this,
+                            RouteBroadcastReciver.class);
+                    stopIntent.setAction(RouteBroadcastReciver.STOP_ROUTE_ACTION);
+                    updateButton(RouteBroadcastReciver.STOP_ROUTE_ACTION);
+
                 }
             }
         });
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (sensors != null) {
-            sensors.onPause();
-        }
-        /*if (mapFragment.isEnabled()) {
-            mapFragment.onPause();
-        }*/
-
     }
 
     @Override
@@ -287,25 +243,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (sensors != null) {
-            sensors.onResume();
-        }
-        /*if (mapFragment.isEnabled()) {
-            mapFragment.onResume();
-        }*/
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (bluetooth != null) {
-            if (bluetooth.isConnected()) {
-                bluetooth.cancelComunication();
-            }
-        }
-        //mapFragment.onDestroy();
+        stopService(routeIntent);
     }
 
     //we need the outState to save the position
@@ -370,19 +310,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onGetGpsLocation(FileStruct fileStruct) {
-        fileStruct.setDb((byte) mic.getDbMobilAvarage());
-        if (bluetooth.isConnected()) {
-            fileStruct.setOvertaking((short) bluetooth.getDistance());
-        } else {
-            fileStruct.setOvertaking((short) 0);
-        }
-        this.fileStruct = fileStruct;
-        if (fabFlag) {
-            manager.addNewLine(fileStruct);
-        }
-    }
 
     @Override
     public void onFragmentCreate() {
@@ -395,17 +322,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView
                     } catch (Exception e) {
                         Log.e("MainActivity ", e.getMessage());
                     }
-                    db = (byte) mic.getDbMobilAvarage();
-                    dis = bluetooth.getDistance();
-                    fileStruct.setDb(db);
-                    fileStruct.setOvertaking(dis);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (routeFragment != null) {
-                                if (fileStruct != null) {
-                                    routeFragment.setRoutePartion(fileStruct);
-                                }
+                            if (routeService != null) {
+                                routeFragment.setRoutePartion(routeService.getRouteNode());
                             }
                         }
                     });
@@ -413,4 +334,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView
             }
         }).start();
     }
+
+    @Override
+    public void onCreateService(RouteService routeService) {
+        this.routeService = routeService;
+    }
+
+    public void updateButton(String action){
+        if(action.equals(RouteBroadcastReciver.START_ROUTE_ACTION)){
+            viewPager.setCurrentItem(1);
+            fabStartRoute.setText("Parar");
+            fabFlag = true;
+        }else{
+            fabFlag = false;
+            fabStartRoute.setText("Iniciar");
+            viewPager.setCurrentItem(0);
+        }
+    }
+
+    public static MainActivity getInstance() {
+        return thisObject;
+    }
+
 }

@@ -180,7 +180,7 @@ public class NpDeasReader {
         routeFolder.delete();
     }
 
-    public FileStruct getFileStruct() {
+    public RouteNode getFileStruct() {
         try {
             byte[] read = new byte[FileConstants.LINE_LENGTH];
             if (input.read(read, 0, FileConstants.LINE_LENGTH) != -1) {
@@ -204,7 +204,7 @@ public class NpDeasReader {
                 for (j = 1; j >= 0; j--) {
                     dis |= ((long) read[i++] & 0xFF) << (8 * j);
                 }
-                FileStruct result = new FileStruct();
+                RouteNode result = new RouteNode();
                 result.setLongetude(Double.longBitsToDouble(longe));
                 result.setLatitude(Double.longBitsToDouble(lati));
                 result.setSpeed(Float.intBitsToFloat(speed));

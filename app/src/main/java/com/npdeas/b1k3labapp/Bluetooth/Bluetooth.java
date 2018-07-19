@@ -32,20 +32,21 @@ public class Bluetooth extends Thread{
     private int lastDisRead = 0;
     private byte[] buffer = new byte[1024];
 
-    public Bluetooth(Activity activity){
+    public Bluetooth(){
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             // se nao tem bluetooth
         }
         if (!mBluetoothAdapter.isEnabled()) {//caso o bluetooth nao esteja ativado, o ativa
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            activity.startActivityForResult(enableBtIntent, Constants.REQUEST_OK);
+            mBluetoothAdapter.enable();
+            /*Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            activity.startActivityForResult(enableBtIntent, Constants.REQUEST_OK);*/
         }
     }
 
 
     public Bluetooth(Activity activity,String mac){
-        this(activity);
+        this();
         File macFile = new File(activity.getFilesDir() + "/B1K3_Lab", Constants.MAC_FILE);
         if (macFile.exists()) {
             try {

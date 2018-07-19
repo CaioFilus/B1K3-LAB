@@ -4,7 +4,7 @@ package com.npdeas.b1k3labapp.Route.Npdeas;
  * Created by NPDEAS on 12/04/2018.
  */
 
-public class FileStruct {
+public class RouteNode {
 
     private double longetude;
     private double latitude;

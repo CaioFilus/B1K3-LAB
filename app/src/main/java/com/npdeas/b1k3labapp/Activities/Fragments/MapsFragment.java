@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import com.npdeas.b1k3labapp.Maps.Maps;
-import com.npdeas.b1k3labapp.Route.Npdeas.FileStruct;
+import com.npdeas.b1k3labapp.Maps.FragmentGPS;
+import com.npdeas.b1k3labapp.Route.Npdeas.RouteNode;
 import com.npdeas.b1k3labapp.R;
 import com.google.android.gms.maps.MapView;
 
@@ -23,23 +23,21 @@ import com.google.android.gms.maps.MapView;
  * Created by NPDEAS on 22/03/2018.
  */
 
-public class MapsFragment extends Fragment implements Maps.OnLocationChanged {
+public class MapsFragment extends Fragment implements FragmentGPS.OnLocationChanged {
 
-    private Maps maps;
+    private FragmentGPS maps;
     private GpsFragmentEvent fragmentsCommunication;
-
 
     private View v;
     private MapView mapFragment;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
             ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_map, container, false);
         mapFragment = v.findViewById(R.id.mapView);
-        maps = new Maps(getActivity(), savedInstanceState, mapFragment);
-        maps.addOnLocationChaged(this);
+        maps = new FragmentGPS(getActivity(), savedInstanceState, mapFragment);
+        maps.addOnLocationChanged(this);
         return v;
     }
 
@@ -85,30 +83,24 @@ public class MapsFragment extends Fragment implements Maps.OnLocationChanged {
     @Override
     public void OnLocationChanged() {
         if (fragmentsCommunication != null) {
-            FileStruct struct = new FileStruct();
+            RouteNode struct = new RouteNode();
             struct.setLongetude(maps.getLongitude());
             struct.setLatitude(maps.getLatitude());
             struct.setSpeed(maps.getSpeed());
-            fragmentsCommunication.onGetGpsLocation(struct);
         }
-    }
-
-    public double getLatitude(){
-        return maps.getLatitude();
-    }
-    public double getLongetude(){
-        return maps.getLongitude();
     }
     public void startRoute(){
         maps.startRoute();
     }
-    public Bitmap finishRoute(){
+    public void finishRoute(){
         maps.finishRoute();
+    }
+
+    public Bitmap getScreenshot(){
         return maps.getBitmap();
     }
 
     public interface GpsFragmentEvent {
-        void onGetGpsLocation(FileStruct fileStruct);
         void onFragmentCreate();
     }
 

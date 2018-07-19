@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 
 import com.npdeas.b1k3labapp.Maps.MapsUtils;
 import com.npdeas.b1k3labapp.Route.Npdeas.FileNames;
-import com.npdeas.b1k3labapp.Route.Npdeas.FileStruct;
+import com.npdeas.b1k3labapp.Route.Npdeas.RouteNode;
 import com.npdeas.b1k3labapp.Route.Npdeas.NpDeasReader;
 import com.npdeas.b1k3labapp.Route.Npdeas.NpDeasWriter;
 
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class Route {
 
-    private ArrayList<FileStruct> route = new ArrayList<>();
+    private ArrayList<RouteNode> route = new ArrayList<>();
     private float maxSpeed = 0;
     private float avarageSpeed = 0;
     private int maxDB = 0;
@@ -33,9 +33,13 @@ public class Route {
     private String name;
     private String dataTime = "";
 
+    private double oldLat = 0;
+    private double oldLng = 0;
+
     public Route(Context context) {
         String name = FileNames.fileName(context);
         writer = new NpDeasWriter(name);
+        time = System.currentTimeMillis();
     }
 
     public Route(File route) {
@@ -48,35 +52,10 @@ public class Route {
     }
 
     private void loadRoute() {
-        FileStruct fileStruct;
-        double oldLat = 0;
-        double oldLng = 0;
+        RouteNode routeNode;
         if (reader != null) {
-            while ((fileStruct = reader.getFileStruct()) != null) {
-
-                avarageDB += fileStruct.getDb();
-                avarageSpeed += fileStruct.getSpeed();
-
-                if (fileStruct.getSpeed() > maxSpeed) {
-                    maxSpeed = fileStruct.getSpeed();
-                }
-                if (fileStruct.getDb() > maxDB) {
-                    maxDB = fileStruct.getDb();
-                }
-                if((oldLat != 0) && (oldLng != 0)) {
-                    float distanceAux = MapsUtils.getDistance(oldLat, oldLng, fileStruct.getLatitude(),
-                            fileStruct.getLongetude());
-                    distance += distanceAux;
-                    fileStruct.setDistance(distance);
-
-                }
-                if(fileStruct.getSpeed() != 0){
-                    time += distance/fileStruct.getSpeed();
-                }
-                oldLat = fileStruct.getLatitude();
-                oldLng = fileStruct.getLongetude();
-                route.add(fileStruct);
-                nodeNum++;
+            while ((routeNode = reader.getFileStruct()) != null) {
+                addNodeInRoute(routeNode);
             }
             routeSize = nodeNum;
             avarageSpeed /= nodeNum;
@@ -98,15 +77,29 @@ public class Route {
         }
     }
 
-    public void addRouteNode(FileStruct fileStruct) {
-        route.add(fileStruct);
+    public void addRouteNode(RouteNode routeNode) {
+
+        route.add(routeNode);
         nodeNum++;
+        routeSize = nodeNum;
+        avarageSpeed /= nodeNum;
+        avarageDB /= nodeNum;
+    }
+    public boolean saveRoute(Bitmap bitmap){
+
+        if(writer != null){
+            for(RouteNode node : route){
+                writer.addNewLine(node);
+            }
+        }
+        writer.close(bitmap);
+        return false;
     }
 
     public int getDistance(){
         return distance;
     }
-    public FileStruct getRouteNode(int index) {
+    public RouteNode getRouteNode(int index) {
         return route.get(index);
     }
 
@@ -134,4 +127,31 @@ public class Route {
     public String getRouteName() {
         return name;
     }
+
+    private void addNodeInRoute(RouteNode routeNode){
+        avarageDB += routeNode.getDb();
+        avarageSpeed += routeNode.getSpeed();
+
+        if (routeNode.getSpeed() > maxSpeed) {
+            maxSpeed = routeNode.getSpeed();
+        }
+        if (routeNode.getDb() > maxDB) {
+            maxDB = routeNode.getDb();
+        }
+        if((oldLat != 0) && (oldLng != 0)) {
+            float distanceAux = MapsUtils.getDistance(oldLat, oldLng, routeNode.getLatitude(),
+                    routeNode.getLongetude());
+            distance += distanceAux;
+            routeNode.setDistance(distance);
+
+        }
+        /*if(routeNode.getSpeed() != 0){
+            time += distance/ routeNode.getSpeed();
+        }*/
+        oldLat = routeNode.getLatitude();
+        oldLng = routeNode.getLongetude();
+        route.add(routeNode);
+        nodeNum++;
+    }
+
 }
