@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import com.npdeas.b1k3labapp.Maps.FragmentGPS;
+import com.npdeas.b1k3labapp.Maps.Map;
 import com.npdeas.b1k3labapp.Route.Npdeas.RouteNode;
 import com.npdeas.b1k3labapp.R;
 import com.google.android.gms.maps.MapView;
@@ -23,9 +23,9 @@ import com.google.android.gms.maps.MapView;
  * Created by NPDEAS on 22/03/2018.
  */
 
-public class MapsFragment extends Fragment implements FragmentGPS.OnLocationChanged {
+public class MapsFragment extends Fragment implements Map.OnLocationChanged {
 
-    private FragmentGPS maps;
+    private Map maps;
     private GpsFragmentEvent fragmentsCommunication;
 
     private View v;
@@ -36,7 +36,7 @@ public class MapsFragment extends Fragment implements FragmentGPS.OnLocationChan
             ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_map, container, false);
         mapFragment = v.findViewById(R.id.mapView);
-        maps = new FragmentGPS(getActivity(), savedInstanceState, mapFragment);
+        maps = new Map(getActivity(), savedInstanceState, mapFragment);
         maps.addOnLocationChanged(this);
         return v;
     }

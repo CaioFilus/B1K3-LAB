@@ -37,7 +37,7 @@ public class Microphone {
             mediaRecorder.start();// início da gravação
             return true;
         }catch (Exception e){
-            //Log.i("MICROPHONE",e.getMessage());//Mensagem de erro
+            Log.i("MICROPHONE",e.getMessage());//Mensagem de erro
             return false;
         }
     }

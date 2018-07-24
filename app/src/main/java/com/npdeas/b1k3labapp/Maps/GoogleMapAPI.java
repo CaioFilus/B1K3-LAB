@@ -22,14 +22,14 @@ import com.google.android.gms.maps.model.LatLng;
 public abstract class GoogleMapAPI implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    // Location updates intervals in sec
+    // Coordinates updates intervals in sec
     private final static int UPDATE_INTERVAL = 1000; // 1 sec
     private final static int FATEST_INTERVAL = 500; // 0.5 sec
     private final static int DISPLACEMENT = 5; // 5 meters
 
-    private final static float MIN_ACCURACY = 20;// 20 metros
+    private final static float MIN_ACCURACY = 0;// 20 metros
 
-    protected static GoogleApiClient mGoogleApiClient;
+    protected GoogleApiClient mGoogleApiClient;
     protected Location mLastLocation;
 
     private Context context;
@@ -80,6 +80,7 @@ public abstract class GoogleMapAPI implements GoogleApiClient.ConnectionCallback
         }
     }
 
+
     protected GoogleApiClient getClient(){
         return this.mGoogleApiClient;
     }
@@ -101,8 +102,15 @@ public abstract class GoogleMapAPI implements GoogleApiClient.ConnectionCallback
             speed =location.getSpeed();
             latitude = location.getLongitude();
             longitude = location.getLongitude();
-            onGetLocation(location);
+            this.onGetLocation(location);
         }
     }
+
+    public boolean isConnected(){
+        return mGoogleApiClient.isConnected();
+    }
+
+
     public abstract void onGetLocation(Location location);
+
 }

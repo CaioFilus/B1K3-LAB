@@ -1,9 +1,6 @@
 package com.npdeas.b1k3labapp.Activities;
 
 import android.Manifest;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -15,7 +12,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,6 +27,7 @@ import com.npdeas.b1k3labapp.Activities.Fragments.StartRouteFragment;
 import com.npdeas.b1k3labapp.Activities.Fragments.TesteFragment;
 import com.npdeas.b1k3labapp.Broadcast.RouteBroadcastReciver;
 import com.npdeas.b1k3labapp.Constants;
+import com.npdeas.b1k3labapp.Notification.RouteNotification;
 import com.npdeas.b1k3labapp.Route.Npdeas.ModalType;
 import com.npdeas.b1k3labapp.R;
 import com.npdeas.b1k3labapp.Sensors.Microphone;
@@ -72,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView
     private FloatingActionButton fab3;
     private FloatingActionButton fab4;
     private SpaceTabLayout tabLayout;
+
+    private RouteNotification notification;
 
 
     @Override
@@ -147,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         });
         startService(routeIntent);
 
+        notification = RouteNotification.getInstance(getBaseContext());
+
         fabModal = findViewById(R.id.fabModal);
         fab1 = findViewById(R.id.fab1);
         fab2 = findViewById(R.id.fab2);
@@ -207,8 +208,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView
                         Intent startIntent = new Intent(MainActivity.this,
                                 RouteBroadcastReciver.class);
                         startIntent.setAction(RouteBroadcastReciver.START_ROUTE_ACTION);
+                        startIntent.setType(MainActivity.class.getName());
                         sendBroadcast(startIntent);
-                        updateButton(RouteBroadcastReciver.START_ROUTE_ACTION);
+
                     } else {
                         Log.i("Main Activityy", "Serviço não criado");
                     }
@@ -217,8 +219,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView
                     Intent stopIntent = new Intent(MainActivity.this,
                             RouteBroadcastReciver.class);
                     stopIntent.setAction(RouteBroadcastReciver.STOP_ROUTE_ACTION);
-                    updateButton(RouteBroadcastReciver.STOP_ROUTE_ACTION);
-
+                    stopIntent.setType(MainActivity.class.getName());
+                    sendBroadcast(stopIntent);
                 }
             }
         });
@@ -246,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView
     protected void onDestroy() {
         super.onDestroy();
         stopService(routeIntent);
+        notification.cancel();
     }
 
     //we need the outState to save the position
@@ -340,8 +343,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         this.routeService = routeService;
     }
 
-    public void updateButton(String action){
-        if(action.equals(RouteBroadcastReciver.START_ROUTE_ACTION)){
+    public void switchButton(){
+        if(!fabFlag){
             viewPager.setCurrentItem(1);
             fabStartRoute.setText("Parar");
             fabFlag = true;

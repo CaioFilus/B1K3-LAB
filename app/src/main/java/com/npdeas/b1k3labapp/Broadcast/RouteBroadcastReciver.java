@@ -3,39 +3,44 @@ package com.npdeas.b1k3labapp.Broadcast;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Button;
 
 import com.npdeas.b1k3labapp.Activities.MainActivity;
-import com.npdeas.b1k3labapp.Maps.FragmentGPS;
+import com.npdeas.b1k3labapp.Maps.Map;
+import com.npdeas.b1k3labapp.Notification.RouteNotification;
 import com.npdeas.b1k3labapp.Services.RouteService;
 
 /**
  * Created by NPDEAS on 7/9/2018.
  */
 
-public class RouteBroadcastReciver extends BroadcastReceiver{
+public class RouteBroadcastReciver extends BroadcastReceiver {
     public static final String START_ROUTE_ACTION = "android.intent.action.START_ROUTE";
     public static final String STOP_ROUTE_ACTION = "android.intent.action.STOP_ROUTE";
 
+    public static final String CALLER_KEY = "caller";
+
     private RouteService routeService;
-    private FragmentGPS fragmentGPS;
-    private Button button;
+    private Map map;
+    private MainActivity mainActivity;
+    private RouteNotification notification;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         routeService = RouteService.getInstance();
-        fragmentGPS = FragmentGPS.getInstance();
-
+        map = Map.getInstance();
+        mainActivity = MainActivity.getInstance();
+        notification = RouteNotification.getInstance(context);
         String action = intent.getAction();
+        String caller = intent.getType();
+
         if (action.equals(START_ROUTE_ACTION)) {
             routeService.startTracking();
         } else if (action.equals(STOP_ROUTE_ACTION)) {
-            routeService.stopTracking(fragmentGPS.getBitmap());
-
+            routeService.stopTracking(map.getBitmap());
         }
-        //This is used to close the notification tray
-        /*Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        context.sendBroadcast(it);*/
+        mainActivity.switchButton();
+        notification.switchButtonState();
+
     }
 
 }

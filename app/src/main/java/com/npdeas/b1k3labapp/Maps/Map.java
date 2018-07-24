@@ -9,7 +9,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -27,10 +26,10 @@ import java.util.ArrayList;
  * Created by NPDEAS on 05/04/2018.
  */
 
-public class FragmentGPS extends GoogleMapAPI implements GoogleMap.OnCameraMoveCanceledListener,
+public class Map extends GoogleMapAPI implements GoogleMap.OnCameraMoveCanceledListener,
         GoogleMap.SnapshotReadyCallback, OnMapReadyCallback {
 
-    private static FragmentGPS thisObject = null;
+    private static Map thisObject = null;
     private Context context;
     private GoogleMap map;
     private Location mLastLocation;
@@ -45,9 +44,10 @@ public class FragmentGPS extends GoogleMapAPI implements GoogleMap.OnCameraMoveC
 
     private final static float DEFAULT_ZOOM = 16;
 
-    public FragmentGPS(Context context, Bundle bundle, MapView mapFragment) {
+    public Map(Context context, Bundle bundle, MapView mapFragment) {
         super(context);
         thisObject = this;
+
         this.context = context;
         mLastLocation = null;
         circles = new ArrayList<>();
@@ -57,7 +57,7 @@ public class FragmentGPS extends GoogleMapAPI implements GoogleMap.OnCameraMoveC
         mapFragment.setEnabled(true);
     }
 
-    public static FragmentGPS getInstance(){
+    public static Map getInstance() {
         return thisObject;
     }
 
@@ -121,10 +121,7 @@ public class FragmentGPS extends GoogleMapAPI implements GoogleMap.OnCameraMoveC
 
     @Override
     public void onGetLocation(Location location) {
-
-
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
         //move map camera
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.animateCamera(CameraUpdateFactory.zoomTo(zoom));
@@ -159,7 +156,9 @@ public class FragmentGPS extends GoogleMapAPI implements GoogleMap.OnCameraMoveC
         if (ContextCompat.checkSelfPermission(context,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
+
             map.setMyLocationEnabled(myLocalization);
+            map.snapshot(this, snapshoot);
         }
     }
 
@@ -167,14 +166,11 @@ public class FragmentGPS extends GoogleMapAPI implements GoogleMap.OnCameraMoveC
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
         if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION)
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            map.snapshot(this, snapshoot);
-            if (mLastLocation != null) {
-                map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(mLastLocation.getLatitude(),
-                        mLastLocation.getLongitude())));
-                map.animateCamera(CameraUpdateFactory.zoomTo(zoom));
-            }
+            map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(getLatitude(),
+                    getLongitude())));
+            map.animateCamera(CameraUpdateFactory.zoomTo(zoom));
         }
     }
 

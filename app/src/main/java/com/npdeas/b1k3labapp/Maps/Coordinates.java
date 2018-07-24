@@ -8,12 +8,12 @@ import android.location.Location;
  * Created by NPDEAS on 05/04/2018.
  */
 
-public class Maps extends GoogleMapAPI {
+public class Coordinates extends GoogleMapAPI {
 
     private Context context;
     private OnLocationChanged locationChanged;
 
-    public Maps(Context context){
+    public Coordinates(Context context){
         super(context);
         this.context = context;
     }
@@ -22,12 +22,11 @@ public class Maps extends GoogleMapAPI {
     }
 
     @Override
-    public void onGetLocation(Location var1) {
+    public void onGetLocation(android.location.Location var1) {
         if(locationChanged != null){
             locationChanged.OnLocationChanged();
         }
     }
-
 
     public interface OnLocationChanged{
        void OnLocationChanged();
