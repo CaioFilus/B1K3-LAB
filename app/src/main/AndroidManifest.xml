@@ -28,16 +28,21 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
+        android:name=".SmartMobility"
         android:allowBackup="true"
         android:debuggable="false"
-        android:icon="@drawable/ic_smart_mobility"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_smart_mobility"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/logo"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:ignore="HardcodedDebugMode">
-
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
         <!--
              The API key for GooLocationMaps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -54,49 +59,62 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="true" />
+
 
         <!-- Broadcast do App -->
         <receiver android:name=".Broadcast.RouteBroadcastReciver" />
+
+
         <!-- Serviços do App -->
         <service
             android:name=".Services.RouteService"
-            android:exported="false"
-            />
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".UI.Activities.MainActivity"
             android:exported="true"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"></activity>
+        <activity android:name=".UI.Activities.RoutesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".UI.Activities.RoutesActivity" />
+        </activity>
+        <activity android:name=".UI.Activities.RouteInfoActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".UI.Activities.RouteInfoActivity" />
+        </activity>
+        <activity android:name=".UI.Activities.BluetoothActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".UI.Activities.MainActivity" />
+        </activity>
+        <activity android:name=".UI.Activities.AboutActivity" />
+        <activity android:name=".UI.Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.RoutesActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.npdeas.b1k3labapp.Activities.RoutesActivity" />
-        </activity>
-        <activity android:name=".Activities.RouteInfoActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.npdeas.b1k3labapp.Activities.RouteInfoActivity" />
-        </activity>
-        <activity android:name=".Activities.BluetoothActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.npdeas.b1k3labapp.Activities.MainActivity" />
-        </activity>
-        <activity android:name=".Activities.AboutActivity" />
-        <activity android:name=".Activities.SplashActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.npdeas.b1k3labapp.Activities.MainActivity" />
-        </activity>
         <activity
-            android:name=".Activities.Popup_Activityes.EasterEggPopup"
+            android:name=".UI.Popup_Activityes.EasterEggPopup"
             android:theme="@style/PopupTheme" />
+
+        <activity android:name=".UI.Activities.RemoteFinishActivity">
+            <intent-filter>
+                <action android:name="com.npdeas.b1k3labapp.FINISH_ROUTE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".UI.Activities.LoginActivity" />
+        <activity android:name=".UI.Activities.FormActivity" />
+
     </application>
 
 </manifest>

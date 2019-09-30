@@ -16,8 +16,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.npdeas.b1k3labapp.R;
 
 import java.util.ArrayList;
 
@@ -27,7 +29,7 @@ import java.util.ArrayList;
  */
 
 public class Map extends GoogleMapAPI implements GoogleMap.OnCameraMoveCanceledListener,
-        GoogleMap.SnapshotReadyCallback, OnMapReadyCallback {
+        GoogleMap.SnapshotReadyCallback, OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
     private static Map thisObject = null;
     private Context context;
@@ -152,14 +154,19 @@ public class Map extends GoogleMapAPI implements GoogleMap.OnCameraMoveCanceledL
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        //Initialize Google Play Services
-        if (ContextCompat.checkSelfPermission(context,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        map.setTrafficEnabled(true);
+        /*map.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+                context, R.raw.map_style));*/
 
-            map.setMyLocationEnabled(myLocalization);
-            map.snapshot(this, snapshoot);
-        }
+        //Initialize Google Play Services
+        setMyLocalization();
+    }
+
+    @Override
+    public void onMapLoaded() {
+
+//        PolylineOptions polylineOptions = new PolylineOptions();
+//        polylineOptions.add((Polyline[]) lines.toArray());
     }
 
     @Override
@@ -186,5 +193,15 @@ public class Map extends GoogleMapAPI implements GoogleMap.OnCameraMoveCanceledL
 
     public interface OnLocationChanged {
         void OnLocationChanged();
+    }
+
+    public void setMyLocalization() {
+        if (ContextCompat.checkSelfPermission(context,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(myLocalization);
+            map.snapshot(this, snapshoot);
+            mGoogleApiClient.reconnect();
+        }
     }
 }

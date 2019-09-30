@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,7 +28,7 @@ public abstract class GoogleMapAPI implements GoogleApiClient.ConnectionCallback
     private final static int FATEST_INTERVAL = 500; // 0.5 sec
     private final static int DISPLACEMENT = 5; // 5 meters
 
-    private final static float MIN_ACCURACY = 0;// 20 metros
+    private final static float MIN_ACCURACY = 20;// 20 metros
 
     protected GoogleApiClient mGoogleApiClient;
     protected Location mLastLocation;
@@ -37,10 +38,11 @@ public abstract class GoogleMapAPI implements GoogleApiClient.ConnectionCallback
     private double latitude;
     private double longitude;
     private float speed;
+    private long time;
 
     protected GoogleMapAPI(Context context) {
         this.context = context;
-        if(mGoogleApiClient == null){
+        if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(context)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -73,7 +75,7 @@ public abstract class GoogleMapAPI implements GoogleApiClient.ConnectionCallback
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                     mLocationRequest, this);
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if(mLastLocation != null){
+            if (mLastLocation != null) {
                 longitude = mLastLocation.getLongitude();
                 latitude = mLastLocation.getLatitude();
             }
@@ -81,9 +83,10 @@ public abstract class GoogleMapAPI implements GoogleApiClient.ConnectionCallback
     }
 
 
-    protected GoogleApiClient getClient(){
+    protected GoogleApiClient getClient() {
         return this.mGoogleApiClient;
     }
+
     public double getLatitude() {
         return latitude;
     }
@@ -97,19 +100,27 @@ public abstract class GoogleMapAPI implements GoogleApiClient.ConnectionCallback
         return speed;
     }
 
-    public void onLocationChanged(Location location){
-        if(location.getAccuracy() < MIN_ACCURACY){
-            speed =location.getSpeed();
-            latitude = location.getLongitude();
+    public void onLocationChanged(Location location) {
+        if (location.getAccuracy() < MIN_ACCURACY) {
+
+//            if (mLastLocation.getLongitude() != location.getLongitude()
+//                    && mLastLocation.getLatitude() != location.getLatitude()) {
+//                float distance = MapsUtils.getDistance(mLastLocation.getLatitude(),
+//                        mLastLocation.getLongitude(), location.getLatitude(), location.getLongitude());
+//                speed = distance / ((float) (System.currentTimeMillis() - time) / 1000);
+//            }
+            speed = location.getSpeed();
+            latitude = location.getLatitude();
             longitude = location.getLongitude();
+            time = System.currentTimeMillis();
+            mLastLocation = location;
             this.onGetLocation(location);
         }
     }
 
-    public boolean isConnected(){
+    public boolean isConnected() {
         return mGoogleApiClient.isConnected();
     }
-
 
     public abstract void onGetLocation(Location location);
 

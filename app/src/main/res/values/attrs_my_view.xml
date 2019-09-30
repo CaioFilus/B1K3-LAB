@@ -4,7 +4,12 @@
         <attr name="exampleDimension" format="dimension" />
         <attr name="exampleColor" format="color" />
         <attr name="exampleDrawable" format="color|reference" />
+    </declare-styleable>
 
+    <declare-styleable name="DividerView">
+        <attr name="nrColumns" format="integer"/>
+        <attr name="backgroundColor" format="color"/>
 
     </declare-styleable>
+
 </resources>

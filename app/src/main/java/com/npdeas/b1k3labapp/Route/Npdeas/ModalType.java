@@ -7,13 +7,38 @@ import com.npdeas.b1k3labapp.R;
  */
 
 public enum ModalType {
-    FEET(R.id.fab4),BIKE(R.id.fab4),CAR(R.id.fab4),BUS(R.id.fab4);
-    public int valor;
-    ModalType(int valor){
-        this.valor = valor;
+
+    NONE(0, "", 0),
+    FEET(1, "A pé", R.drawable.ic_corpo),
+    BIKE(2, "Bicicleta", R.drawable.ic_bike),
+    MOTOCICLE(3, "Moto", 0),
+    CAR(4, "Carro", R.drawable.ic_carro),
+    BUS(5, "Onibus", R.drawable.ic_bus);
+
+    public int value;
+    public String name;
+    public int imgId;
+
+    ModalType(int valor, String name, int imgId) {
+        this.value = valor;
+        this.name = name;
+        this.imgId = imgId;
     }
 
     public int getValor() {
-        return valor;
+        return value;
+    }
+
+    public boolean compare(int i) {
+        return value == i;
+    }
+
+    public static ModalType getValue(int status) {
+        ModalType[] as = ModalType.values();
+        for (int i = 0; i < as.length; i++) {
+            if (as[i].compare(status))
+                return as[i];
+        }
+        return null;
     }
 }

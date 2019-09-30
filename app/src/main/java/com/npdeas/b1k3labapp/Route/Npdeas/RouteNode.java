@@ -6,6 +6,8 @@ package com.npdeas.b1k3labapp.Route.Npdeas;
 
 public class RouteNode {
 
+    private long routeId;
+
     private double longetude;
     private double latitude;
     private float speed;
@@ -13,6 +15,7 @@ public class RouteNode {
     private int overtaking;
     private long time;
     private int distance;
+    private int[] distances;
 
     public double getLongetude() {
         return longetude;
@@ -68,5 +71,21 @@ public class RouteNode {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public int[] getDistances() {
+        return distances;
+    }
+
+    public void setDistances(int[] distances) {
+        this.distances = distances;
+    }
+
+    public long getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(long routeId) {
+        this.routeId = routeId;
     }
 }

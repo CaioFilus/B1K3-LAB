@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.github.anastr.speedviewlib.PointerSpeedometer
+            android:id="@+id/velocimeter"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            app:sv_backgroundCircleColor="@android:color/transparent"
+            app:sv_centerCircleColor="@color/blueNpDeas"
+            app:sv_indicatorColor="@color/greenLightNpDeas"
+            app:sv_indicatorLightColor="@color/greenNpDeas"
+            app:sv_maxSpeed="60"
+            app:sv_minSpeed="0"
+            app:sv_pointerColor="@color/blueLightNpDeas"
+            app:sv_speedTextColor="@color/greenNpDeas"
+            app:sv_speedometerColor="@color/blueNpDeas"
+            app:sv_textColor="@color/greenNpDeas"
+            app:sv_textSize="10dp"
+            app:sv_unitTextColor="@color/greenLightNpDeas"
+            app:sv_unitTextSize="6dp" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill"
+            android:layout_marginEnd="@dimen/info_layout_margin"
+            android:layout_marginStart="@dimen/info_layout_margin"
+            android:layout_marginTop="@dimen/info_layout_margin"
+            android:columnCount="2"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewMic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ruído:"
+                    android:theme="@style/TextViewLeft" />
+
+                <TextView
+                    android:id="@+id/textViewInfoMic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_mic"
+                    android:text="50db"
+                    android:theme="@style/InfoTextViewLeft" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Velocidade Média"
+                    android:theme="@style/TextViewRight" />
+
+
+                <TextView
+                    android:id="@+id/textViewAvrgSpd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_average_speed"
+                    android:text="Em Breve"
+                    android:theme="@style/InfoTextViewRight" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewMaxMic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ruído Maximo:"
+                    android:theme="@style/TextViewLeft" />
+
+
+                <TextView
+                    android:id="@+id/textViewMaxDB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_mic_max"
+                    android:text="Em Breve"
+                    android:theme="@style/InfoTextViewLeft" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Velocidade Maxima"
+                    android:theme="@style/TextViewRight" />
+
+
+                <TextView
+                    android:id="@+id/textViewMaxSpd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawableStart="@drawable/ic_max_speed"
+                    android:text="Em Breve"
+                    android:theme="@style/InfoTextViewRight" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/layoutOvertaking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:orientation="vertical"
+
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Distancia:"
+                    android:theme="@style/TextViewLeft" />
+
+
+                <TextView
+                    android:id="@+id/textViewDisInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_distance"
+                    android:text="2m"
+                    android:theme="@style/InfoTextViewLeft" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Frequencia Cardiaca"
+                    android:theme="@style/TextViewRight" />
+
+                <TextView
+                    android:id="@+id/textViewHeartFreq"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/InfoTextViewRight"
+                    android:drawableStart="@drawable/ic_cardiogram"
+                    android:text="Em Breve" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutTemperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Temperatura"
+                    android:theme="@style/TextViewRight" />
+
+                <TextView
+                    android:id="@+id/textViewTemperature"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/InfoTextViewLeft"
+                    android:drawableStart="@drawable/ic_temperature"
+                    android:text="Em Breve" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutHumidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Umidade"
+                    android:theme="@style/TextViewRight" />
+
+                <TextView
+                    android:id="@+id/textViewHumidity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/InfoTextViewRight"
+                    android:drawableStart="@drawable/ic_humidity"
+                    android:text="Em Breve" />
+
+            </LinearLayout>
+
+
+        </GridLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/info_layout_margin"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Latitude e Longitude:"
+                android:theme="@style/TextViewLeft" />
+
+            <TextView
+                android:id="@+id/txtViewInfoGPS"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="33333 lat , 333333 lng"
+                android:theme="@style/InfoTextViewLeft" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

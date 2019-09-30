@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <!--<color name="colorPrimary">#3F51B5</color>-->
+    <color name="colorPrimary">#37B5B3</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="blueNpDeas">#18385f</color>
+    <!--<color name="blueNpDeas">#18385f</color>-->
+    <color name="blueNpDeas">@color/colorPrimary</color>
     <color name="redNpDeas">#A74136</color>
     <color name="yellowNpDeas">#626C26</color>
-    <color name="greenNpDeas">#5E9675</color>
+    <color name="greenNpDeas">#277800</color>
+
+    <color name="greenGradient">#38AD00</color>
+    <color name="blueGradient">#2B65AB</color>
+
+    <color name="greenPressed">#40C400</color>
+    <color name="bluePressed">#3B8BEB</color>
+    <color name="redPressed">#AF483E</color>
 
     <color name="blueLightNpDeas">#298587</color>
     <color name="greenLightNpDeas">#659695</color>
@@ -21,4 +30,8 @@
     <color name="blueNpDeasTran">#7718385f</color>
 
     <color name="blackTransparent">#88000000</color>
+
+    <color name="whiteTransparent">#88E0E0E0</color>
+
+
 </resources>

@@ -15,75 +15,105 @@ public class Microphone {
     public static final int MIC_OK = 0;
 
     private MediaRecorder mediaRecorder;//cria variavel mediaRecorder
-    private int avaregeMic[] =  new int[Constants.AVAREGE_SIZE];
+    private File audiofile;
+    private int avaregeMic[] = new int[Constants.AVAREGE_SIZE];
     private int index = 0;
+    private int lastRecord = 0;
+    private boolean isRecording = false;
 
 
-    public Microphone(){
-        mediaRecorder = new MediaRecorder();//alocação de memória
-        try {
-            File audiofile = File.createTempFile("sound", ".3gp");//cria arquivo temporário
-            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);// Entrada Microfone
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);//Ajusta formato de saída .mp3
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);//Codificação para mp3
-            mediaRecorder.setOutputFile(audiofile.getAbsolutePath());
-        }catch (Exception e){
-            Log.i("teste",e.getMessage());//Mensagem de erro
-        }
+    public Microphone() {
+
     }
-    public boolean startRecord(){//função de gravação
-        try {
-            mediaRecorder.prepare();
-            mediaRecorder.start();// início da gravação
-            return true;
-        }catch (Exception e){
-            Log.i("MICROPHONE",e.getMessage());//Mensagem de erro
-            return false;
-        }
-    }
-    public int getAmplitude(){
-        return mediaRecorder.getMaxAmplitude();
-    }//função getAmplitude retorna a máxima amplitude da variável mediaRecorder
-    public double getDB(){
-        return 20* Math.log10(getAmplitude());
-    }// função getDB retorna 20*log10 da função getAmplitude
-    public double getDB(int amp){
-        return 20* Math.log10(amp);
-    }
-    // função getDB retorna valor inteiro 20*log10 da variavel amp
-    public double getDB(double amp){
-        return 20* Math.log10(amp);
-    }
-    // função getDB retorna valor 20*log10 da variavel amp
-    public double getDbMobilAvarage(){//cria função getDbMobilAvarage()
-        int sum = 0;
-        if(index >= Constants.AVAREGE_SIZE){//caso index seja >=Constants.AVAREGE_SIZE receberá 0
-            index = 0;
-        }
-        avaregeMic[index] =  mediaRecorder.getMaxAmplitude();
-        index++;
-        int size = 0;
-        for(int j = 0; j < Constants.AVAREGE_SIZE;j++){
-            if (avaregeMic[j] != 0){
-                sum += avaregeMic[j];
-                size++;
+
+    public boolean startRecord() {//função de gravação
+        if (mediaRecorder == null) {
+            try {
+                audiofile = File.createTempFile("sound", ".3gp");//cria arquivo temporário
+                mediaRecorder = new MediaRecorder();
+                mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                mediaRecorder.setOutputFile(audiofile.getAbsolutePath());
+                mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+                mediaRecorder.prepare();
+                mediaRecorder.start();
+                isRecording = true;
+                return true;
+            } catch (Exception e) {
+                //Log.i("MICROPHONE",e.getMessage());//Mensagem de erro
+                return false;
             }
         }
-        if(size == 0){
-            return 0;
+        return true;
+    }
+
+    public int getAmplitude() {
+        if (mediaRecorder != null) {
+            return mediaRecorder.getMaxAmplitude();
         }
-        int avarage = sum/size;
-        return getDB(avarage);
+        return 0;
+    }//função getAmplitude retorna a máxima amplitude da variável mediaRecorder
+
+    public double getDB() {
+        return 20 * Math.log10(getAmplitude());
+    }// função getDB retorna 20*log10 da função getAmplitude
+
+    public double getDB(int amp) {
+        return 20 * Math.log10(amp);
+    }
+
+    // função getDB retorna valor inteiro 20*log10 da variavel amp
+    public double getDB(double amp) {
+        return 20 * Math.log10(amp);
+    }
+
+    // função getDB retorna valor 20*log10 da variavel amp
+    public double getDbMobilAvarage() {//cria função getDbMobilAvarage()
+        if (mediaRecorder != null) {
+            int sum = 0;
+            if (index >= Constants.AVAREGE_SIZE) {//caso index seja >=Constants.AVAREGE_SIZE receberá 0
+                index = 0;
+            }
+            avaregeMic[index] = mediaRecorder.getMaxAmplitude();
+            index++;
+            int size = 0;
+            for (int j = 0; j < Constants.AVAREGE_SIZE; j++) {
+                if (avaregeMic[j] != 0) {
+                    sum += avaregeMic[j];
+                    size++;
+                }
+            }
+            if (size == 0) {
+                return 0;
+            }
+            int avarage = sum / size;
+            lastRecord = avarage;
+            return getDB(avarage);
+        } else {
+            return getDB(lastRecord);
+        }
         //return db + getDB(avarage/32767.)/94;
     }
-    public void stopRecording(){
-        mediaRecorder.stop();
-        mediaRecorder.release();
+
+    public void stopRecording() {
+        try {
+            mediaRecorder.stop();
+            mediaRecorder.release();
+            mediaRecorder = null;
+            isRecording = false;
+            audiofile.delete();
+
+        } catch (Exception e) {
+
+        }
     }
-    public void start(){
-        mediaRecorder.start();// início da gravação
-    }
-    public void stop(){
+
+//    public void start() {
+//        mediaRecorder.start();// início da gravação
+//    }
+
+    public void stop() {
         mediaRecorder.stop();
     }
 }

@@ -5,6 +5,8 @@ package com.npdeas.b1k3labapp;
  */
 
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,90 +15,67 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.npdeas.b1k3labapp.Route.Route;
 
-import java.io.File;
-import java.util.ArrayList;
+import com.npdeas.b1k3labapp.Database.Structs.Route;
+import com.npdeas.b1k3labapp.Utils.FileUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class CardArrayAdapter extends RecyclerView.Adapter<CardArrayAdapter.ViewHolder> {
 
-    static private CardArrayAdapter thisObject = null;
 
-    private ArrayList<Route> mDataset;
-    private static ItemClickListener itemClickListener;
-    private ViewHolder holder;
-    private int position;
+    private final SimpleDateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
+    private final SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
 
-
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        public CardView cardViewMap;
-        public ImageView imgViewMap;
-        public TextView textViewTime;
-        public TextView textViewDate;
-        public TextView textViewTitle;
-        public int position;
+    private Context context;
+    private List<Route> mDataset;
+    private ItemClickListener itemClickListener;
 
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            cardViewMap = itemView.findViewById(R.id.carfViewMap);
-            imgViewMap = itemView.findViewById(R.id.imgViewMap);
-            textViewTime = itemView.findViewById(R.id.txtViewTime);
-            textViewDate = itemView.findViewById(R.id.textViewDate);
-            textViewTitle = itemView.findViewById(R.id.textViewRouteTitle);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (itemClickListener != null) {
-                itemClickListener.onItemClick(position, imgViewMap);
-            }
-        }
-
-
-    }
-
-    private CardArrayAdapter(ArrayList<Route> myDataset) {
+    public CardArrayAdapter(Context context, List<Route> myDataset) {
         mDataset = myDataset;
+        this.context = context;
     }
-    public static CardArrayAdapter getInstance(ArrayList<Route> myDataset){
-        if(thisObject == null){
-            thisObject = new CardArrayAdapter(myDataset);
-            return thisObject;
-        }
-        return thisObject;
-    }
-    public static CardArrayAdapter getInstance(){
-        return thisObject;
-    }
-    public Route getRoute(int index){
+
+    public Route getRoute(int index) {
         return mDataset.get(index);
     }
 
     public void setOnItemClickListener(ItemClickListener itemClickListener) {
-        CardArrayAdapter.itemClickListener = itemClickListener;
+        this.itemClickListener = itemClickListener;
     }
 
+    @NonNull
     @Override
-    public CardArrayAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // create a new view
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.fragment_card_view, viewGroup, false);
         return new ViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        this.holder = holder;
-        String[] dataTime = mDataset.get(position).getDataTime().split(" ");
-        holder.textViewTitle.setText(mDataset.get(position).getRouteName());
-        holder.imgViewMap.setImageBitmap(mDataset.get(position).getImg());
-        holder.textViewTime.setText(dataTime[0]);
-        holder.textViewDate.setText(dataTime[1]);
-        holder.position = position;
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        Route route = mDataset.get(position);
+//        String[] dataTime = mDataset.get(position).finishDate.toString().split(" ");
+        holder.textViewTitle.setText(route.name);
+        holder.imgViewMap.setImageBitmap(FileUtils.readImg(context, route.img));
+        holder.textViewTime.setText(formatTime.format(route.startDate));
+        holder.textViewDate.setText(formatDate.format(route.startDate));
+//        holder.position = position;
+        if (route.webId == 0) {
+            holder.imgViewSendCloud.setVisibility(View.INVISIBLE);
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (itemClickListener != null) {
+                    itemClickListener.onRouteClick(mDataset.get(holder.getLayoutPosition()),
+                            holder.imgViewMap);
+                }
+            }
+        });
+
         /*holder.imgFile = mDataset.get(position).getImgFile();
         holder.routeFile = mDataset.get(position).getRouteFile();*/
 
@@ -108,9 +87,29 @@ public class CardArrayAdapter extends RecyclerView.Adapter<CardArrayAdapter.View
         return mDataset.size();
     }
 
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-    public interface ItemClickListener {
-        void onItemClick(int routeIndex, ImageView image);
+        public CardView cardViewMap;
+
+        public ImageView imgViewMap;
+        public TextView textViewTime;
+        public TextView textViewDate;
+        public TextView textViewTitle;
+        public ImageView imgViewSendCloud;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            cardViewMap = itemView.findViewById(R.id.carfViewMap);
+            imgViewMap = itemView.findViewById(R.id.imgViewMap);
+            textViewTime = itemView.findViewById(R.id.txtViewTime);
+            textViewDate = itemView.findViewById(R.id.textViewDate);
+            textViewTitle = itemView.findViewById(R.id.textViewRouteTitle);
+            imgViewSendCloud = itemView.findViewById(R.id.imgViewSendCloud);
+        }
+
     }
 
+    public interface ItemClickListener {
+        void onRouteClick(Route route, ImageView image);
+    }
 }

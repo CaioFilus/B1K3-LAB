@@ -27,6 +27,10 @@
     <string name="bus">Imagem do onibus</string>
     <string name="car">Imagem do carro</string>
 
+    <string name="route_confirm_text">Você tem certeza que deseja terminar a rota?</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
+
     <string name="tab_map">Mapa</string>
     <string name="tab_sensor">Sensores</string>
     <string name="tab_graph">Gráficos</string>
@@ -42,8 +46,37 @@
 
     <string name="new_message_notification_title_template">Controlador SmartMobility</string>
 
+
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
+
+
+
+
+    <string-array name="gender">
+        <item>Masculino</item>
+        <item>Feminino</item>
+        <item>Outro</item>
+    </string-array>
+
+    <string-array name="scholarity">
+        <item>Ensino Fundamental Completo</item>
+        <item>Ensino Fundamental Incompleto</item>
+        <item>Ensino Médio Completo</item>
+        <item>Ensino Médio Incompleto</item>
+        <item>Ensino Superior Completo</item>
+        <item>Ensino Superior Incompleto</item>
+        <item>Especialização</item>
+        <item>Mestrado</item>
+        <item>Doutorado</item>
+    </string-array>
+
+    <string-array name="whatDefcy">
+        <item>Auditiva</item>
+        <item>Locomotiva</item>
+        <item>Visual</item>
+    </string-array>
+
 
 
 </resources>

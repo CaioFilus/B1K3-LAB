@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,10 +16,10 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 
-import com.npdeas.b1k3labapp.Activities.Fragments.StartRouteFragment;
-import com.npdeas.b1k3labapp.Activities.MainActivity;
+import com.npdeas.b1k3labapp.UI.Activities.MainActivity;
 import com.npdeas.b1k3labapp.Broadcast.RouteBroadcastReciver;
 import com.npdeas.b1k3labapp.R;
+import com.npdeas.b1k3labapp.Services.RouteService;
 import com.npdeas.b1k3labapp.Utils.CircleTransform;
 
 import java.util.Random;
@@ -51,8 +52,11 @@ public class RouteNotification {
         PendingIntent pMainActivity = PendingIntent.getActivity(context, 0,
                 new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(NOTIFICATION_TAG, "Route Controll", importance);
+        }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-
                 // Set appropriate defaults for the notification light, sound,
                 // and vibration.
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -63,6 +67,7 @@ public class RouteNotification {
                 .setContentTitle(title)
                 .setContentText(text)
                 .setLargeIcon(picture)
+                .setChannelId(NOTIFICATION_TAG)
                 .setContentIntent(pMainActivity)
                 .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
                         .setShowActionsInCompactView(0))
@@ -87,9 +92,9 @@ public class RouteNotification {
 
     public Notification switchButtonState() {
         NotificationCompat.Action action;
-        if(!buttonState){
+        if (!buttonState) {
             action = getAction(RouteBroadcastReciver.STOP_ROUTE_ACTION);
-        }else{
+        } else {
             action = getAction(RouteBroadcastReciver.START_ROUTE_ACTION);
         }
         buttonState = !buttonState;
@@ -111,25 +116,23 @@ public class RouteNotification {
     public void cancel() {
         final NotificationManager nm = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.cancel(NOTIFICATION_TAG, 0);
 
+        nm.cancel(NOTIFICATION_TAG, 0);
     }
 
-    private NotificationCompat.Action getAction(String action){
-        commandIntent = new Intent(context, RouteBroadcastReciver.class);
-        commandIntent.setType(Notification.class.getName());
+    private NotificationCompat.Action getAction(String action) {
+        commandIntent = new Intent(RouteService.BROADCAST);
 
-        if(action.equals(RouteBroadcastReciver.START_ROUTE_ACTION)){
-            commandIntent.setAction(RouteBroadcastReciver.START_ROUTE_ACTION);
-
-            PendingIntent pIntentStart = PendingIntent.getBroadcast(context, 1,
+        if (action.equals(RouteBroadcastReciver.START_ROUTE_ACTION)) {
+            commandIntent.putExtra(RouteService.ACTION_FIELD, RouteBroadcastReciver.START_ROUTE_ACTION);
+            PendingIntent pIntentStart = PendingIntent.getBroadcast(context, 0,
                     commandIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             return new NotificationCompat.Action(android.R.drawable.ic_media_play, "Iniciar",
                     pIntentStart);
-        }else{
-            commandIntent.setAction(RouteBroadcastReciver.STOP_ROUTE_ACTION);
-
-            PendingIntent pIntentStart = PendingIntent.getBroadcast(context, 1,
+        } else {
+            //commandIntent.setAction(RouteBroadcastReciver.STOP_ROUTE_ACTION);
+            commandIntent.putExtra(RouteService.ACTION_FIELD, RouteBroadcastReciver.STOP_ROUTE_ACTION);
+            PendingIntent pIntentStart = PendingIntent.getBroadcast(context, 0,
                     commandIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             return new NotificationCompat.Action(android.R.drawable.ic_media_pause, "Parar",
                     pIntentStart);
@@ -150,18 +153,16 @@ public class RouteNotification {
                 break;
             case 3:
                 result = BitmapFactory.decodeResource(res, R.mipmap.bike_background_3);
-                break;
+                 break;
             case 4:
                 result = BitmapFactory.decodeResource(res, R.mipmap.bike_background_4);
                 break;
             default:
                 return null;
         }
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return result;
         }
         return new CircleTransform().transform(result);
     }
-
-
 }

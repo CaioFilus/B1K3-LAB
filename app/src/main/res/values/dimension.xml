@@ -21,4 +21,6 @@
     <dimen name="standard_155">40dp</dimen>
 
 
+    <dimen name="info_layout_margin">40dp</dimen>
+
 </resources>
